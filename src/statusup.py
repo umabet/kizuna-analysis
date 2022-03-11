@@ -5,6 +5,7 @@ import os
 import json
 
 log_folder = folder = os.path.join(os.getenv('UserProfile'), 'Umamusume', 'KizunaData', 'log')
+plt.rcParams['font.family'] = "MS Gothic"
 
 
 class Status:
@@ -74,7 +75,7 @@ def main(single_mode_chara_id):
     print('レース:{}戦{}勝'.format(len(json_log['chara_info']['race_result_list']), len([x for x in json_log['chara_info']['race_result_list'] if x['result_rank'] == 1])))
     print('お休み回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] == 701])))
 
-    labels = 'initial', 'training', 'training(summer)', 'event', 'race', 'succession', 'nickname', 'goods'
+    labels = '初期値', 'トレーニング', 'トレーニング(夏合宿)', 'イベント', 'レース', '継承', '称号', 'アイテム'
     data = [initial.sum(), training.sum(), training_summer.sum(), event.sum(), race.sum(), succession.sum(), nickname.sum(), goods.sum()]  # 条件ごとのステータス上昇値を計算してグラフ用のデータを作成
 
     fig1, ax1 = plt.subplots()
