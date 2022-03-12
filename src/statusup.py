@@ -66,7 +66,7 @@ def main(single_mode_chara_id):
     initial = StatusUpLog(json_log['log'][0: 1])  # 1つ目が初期値
     training = StatusUpLog([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [101, 102, 103, 105, 106]])  # 100番台のcommand_idは通常トレーニング
     training_summer = StatusUpLog([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [601, 602, 603, 604, 605]])  # 100番台のcommand_idは夏合宿トレーニング
-    event = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and not x['story_id'] in race_story_id + succession_story_id + nickname_story_id])  # 称号取得や継承、二つ名イベント以外のすべてのイベント
+    event = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and not x['story_id'] in race_story_id + succession_story_id + nickname_story_id + [0]])  # 称号取得や継承、二つ名イベント以外のすべてのイベント
     race = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and x['story_id'] in race_story_id])
     succession = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and x['story_id'] in succession_story_id])
     nickname = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and x['story_id'] in nickname_story_id])
