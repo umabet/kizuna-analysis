@@ -1,4 +1,6 @@
 import re
+import subprocess
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -86,7 +88,10 @@ def main(single_mode_chara_id):
         os.makedirs(image_folder)
 
     # plt.show()
-    plt.savefig(os.path.join(image_folder, single_mode_chara_id.zfill(6) + '.png'))
+
+    output_filename = os.path.join(image_folder, single_mode_chara_id.zfill(6) + '.png')
+    plt.savefig(output_filename)
+    subprocess.Popen(['start', output_filename], shell=True)
 
 
 print('最新のsingle_mode_chara_id: ' + [x for x in os.listdir(log_folder) if re.match('^[0-9]', x)][-1].replace('.json', ''))
