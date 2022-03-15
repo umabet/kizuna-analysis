@@ -1,4 +1,4 @@
-import re
+import sqlite3
 import subprocess
 
 import matplotlib.pyplot as plt
@@ -8,6 +8,10 @@ import json
 
 log_folder = folder = os.path.join(os.getenv('UserProfile'), 'Umamusume', 'KizunaData', 'log')
 plt.rcParams['font.family'] = "MS Gothic"
+master_path = os.path.join(os.getenv("UserProfile"), 'AppData', 'LocalLow', 'Cygames', 'umamusume', 'master', 'master.mdb')
+
+conn = sqlite3.connect(master_path)
+cur = conn.cursor()
 
 
 class Status:
@@ -52,6 +56,7 @@ def main(single_mode_chara_id):
         print('該当するデータはありません')
         return
     json_log = json.load(fp)
+    fp.close()
 
     if 'chara_info' not in json_log:
         print('このデータは育成が終わっていません')
@@ -94,6 +99,28 @@ def main(single_mode_chara_id):
     subprocess.Popen(['start', output_filename], shell=True)
 
 
-print('最新のsingle_mode_chara_id: ' + [x for x in os.listdir(log_folder) if re.match('^[0-9]', x)][-1].replace('.json', ''))
+def print_list():
+    try:
+        fp = open(os.path.join(log_folder, 'index.json'), 'r')
+    except FileNotFoundError:
+        print('ログがありません')
+        return
+    index_json = json.load(fp)
+    sorted_id = sorted(sorted(index_json, reverse=True)[0: 10])
+
+    print('{:6} | {:5} | {:19} | {}'.format('id', 'rank', 'create_time', 'chara_name'))
+    for i in sorted_id:
+        cur.execute('SELECT text FROM text_data WHERE category = 4 and `index` = {}'.format(index_json[i]['card_id']))
+        name = cur.fetchone()[0]
+        print('{} | {:5} | {} | {}'.format(i, index_json[i]['rank_score'], index_json[i]['create_time'], name))
+
+
+print_list()
 while True:
-    main(input('解析したいsingle_mode_chara_idを入力してください:'))
+    chara_id = input('解析したいidを入力してください:')
+    if not chara_id.isdigit():
+        break
+    main(chara_id)
+
+cur.close()
+conn.close()
