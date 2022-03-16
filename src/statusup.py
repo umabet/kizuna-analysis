@@ -7,10 +7,10 @@ import os
 import json
 
 log_folder = folder = os.path.join(os.getenv('UserProfile'), 'Umamusume', 'KizunaData', 'log')
+master_file = os.path.join(os.getenv("UserProfile"), 'AppData', 'LocalLow', 'Cygames', 'umamusume', 'master', 'master.mdb')
 plt.rcParams['font.family'] = "MS Gothic"
-master_path = os.path.join(os.getenv("UserProfile"), 'AppData', 'LocalLow', 'Cygames', 'umamusume', 'master', 'master.mdb')
 
-conn = sqlite3.connect(master_path)
+conn = sqlite3.connect(master_file)
 cur = conn.cursor()
 
 
@@ -108,7 +108,7 @@ def print_list():
     index_json = json.load(fp)
     sorted_id = sorted(sorted(index_json, reverse=True)[0: 10])
 
-    print('{:6} | {:5} | {:19} | {}'.format('id', 'rank', 'create_time', 'chara_name'))
+    print('{:6} | {:5} | {:19} | {}'.format('id', 'score', 'create_time', 'chara_name'))
     for i in sorted_id:
         cur.execute('SELECT text FROM text_data WHERE category = 4 and `index` = {}'.format(index_json[i]['card_id']))
         name = cur.fetchone()[0]
