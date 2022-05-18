@@ -75,7 +75,7 @@ def main(single_mode_chara_id):
     race = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and x['story_id'] in race_story_id])
     succession = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and x['story_id'] in succession_story_id])
     nickname = StatusUpLog([x for x in json_log['log'] if 'story_id' in x and x['story_id'] in nickname_story_id])
-    goods = StatusUpLog([x for x in json_log['log'] if 'use_num' in x])  # アイテムを使用した時に"use_num": 1になる
+    goods = StatusUpLog([x for x in json_log['log'] if 'use_num' in x or 'use_item_info_array' in x])  # アイテムを使用した時
 
     print('トレーニング回数（通常）:{}'.format(len(training.statuses)))
     print('トレーニング回数（合宿）:{}'.format(len(training_summer.statuses)))
@@ -118,7 +118,8 @@ def print_list():
 print_list()
 while True:
     chara_id = input('解析したいidを入力してください:')
-    if not chara_id.isdigit():
+    if chara_id.isalpha():
+        print('プログラムを終了します')
         break
     main(chara_id)
 
