@@ -81,6 +81,12 @@ def main(single_mode_chara_id):
     print('トレーニング回数（合宿）:{}'.format(len(training_summer.statuses)))
     print('レース:{}戦{}勝'.format(len(json_log['chara_info']['race_result_list']), len([x for x in json_log['chara_info']['race_result_list'] if x['result_rank'] == 1])))
     print('お休み回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] == 701])))
+    print('スピード練習回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [101, 601]])))
+    print('スタミナ練習回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [105, 602]])))
+    print('パワー練習回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [102, 603]])))
+    print('根性練習回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [103, 604]])))
+    print('賢さ練習回数:{}'.format(len([x for x in json_log['log'] if 'command_id' in x and x['command_id'] in [106, 605]])))
+    # TODO:お出かけと夏合宿のcommand_idを調べる
 
     labels = '初期値', 'トレーニング', 'トレーニング(夏合宿)', 'イベント', 'レース', '継承', '称号', 'アイテム'
     data = [initial.sum(), training.sum(), training_summer.sum(), event.sum(), race.sum(), succession.sum(), nickname.sum(), goods.sum()]  # 条件ごとのステータス上昇値を計算してグラフ用のデータを作成
@@ -106,7 +112,7 @@ def print_list():
         print('ログがありません')
         return
     index_json = json.load(fp)
-    sorted_id = sorted(sorted(index_json, reverse=True)[0: 10])
+    sorted_id = sorted(sorted(index_json, reverse=True)[0: 200])
 
     print('{:6} | {:5} | {:19} | {}'.format('id', 'score', 'create_time', 'chara_name'))
     for i in sorted_id:
